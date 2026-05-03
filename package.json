@@ -1,5 +1,5 @@
 {
-  "name": "@oolio-group/dynamo-helper",
+  "name": "@payroo-group/dynamo-helper",
   "description": "DynamoDB client and query expression builder. Helps with most of the DynamoDB operations and takes care of the hard stuff for you.",
   "keywords": [
     "dynamodb",
@@ -17,12 +17,11 @@
   "types": "lib",
   "repository": {
     "type": "git",
-    "url": "http://github.com/oolio-group/dynamo-helper.git"
+    "url": "http://github.com/payroo-group/dynamo-helper.git"
   },
-  "bugs": "https://github.com/oolio-group/dynamo-helper/issues",
+  "bugs": "https://github.com/payroo-group/dynamo-helper/issues",
   "license": "MIT",
   "contributors": [
-    "Shidil Eringa <shidil@live.com>",
     "Snehit Velma <snehithvelma@gmail.com>"
   ],
   "engines": {
