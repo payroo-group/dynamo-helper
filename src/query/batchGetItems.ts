@@ -1,8 +1,27 @@
 import { DynamoDBDocumentClient, BatchGetCommand, BatchGetCommandOutput } from '@aws-sdk/lib-dynamodb';
-import chunk from 'lodash/chunk';
-import keyBy from 'lodash/keyBy';
-import flatten from 'lodash/flatten';
 import { AnyObject, TableConfig, Key } from '../types';
+
+function chunkArray<T>(items: Array<T>, size: number): Array<Array<T>> {
+  const result: Array<Array<T>> = [];
+  for (let i = 0; i < items.length; i += size) {
+    result.push(items.slice(i, i + size));
+  }
+  return result;
+}
+
+function flattenArray<T>(items: Array<Array<T>>): Array<T> {
+  return items.reduce((acc, current) => acc.concat(current), [] as Array<T>);
+}
+
+function keyByArray<T>(
+  items: Array<T>,
+  keySelector: (item: T) => string,
+): Record<string, T> {
+  return items.reduce((acc, current) => {
+    acc[keySelector(current)] = current;
+    return acc;
+  }, {} as Record<string, T>);
+}
 
 /**
  * Get many items from the db matching the provided keys
@@ -25,9 +44,9 @@ export async function batchGetItems(
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
   if (keys.length > 100) {
     const results = await Promise.all(
-      chunk(keys, 100).map(x => batchGetItems(dbClient, table, x, fields, consistentRead)),
+      chunkArray(keys, 100).map(x => batchGetItems(dbClient, table, x, fields, consistentRead)),
     );
-    return flatten(results);
+    return flattenArray(results);
   }
 
   const items = [];
@@ -68,7 +87,7 @@ export async function batchGetItems(
 
   // DynamoDB doesn't return results in any order
   // To support dataloader pattern, sort result in same order as keys
-  const itemsHash = keyBy(
+  const itemsHash = keyByArray(
     items,
     x => `${x[partitionKeyName]}::${x[sortKeyName]}`,
   );

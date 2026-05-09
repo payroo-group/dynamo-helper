@@ -1,9 +1,9 @@
 import { BatchGetCommand } from '@aws-sdk/lib-dynamodb';
-import fill from 'lodash/fill';
 import { testClient, testTableConf } from '../testUtils';
 import { batchGetItems as batchGetItemsMethod } from './batchGetItems';
 
 describe('batchGetItems', () => {
+  const createFilledArray = (count: number): Array<object> => Array.from({ length: count }, () => ({}));
   const batchGetItems = batchGetItemsMethod.bind(
     null,
     testClient,
@@ -54,9 +54,9 @@ describe('batchGetItems', () => {
 
     await expect(batchGetItems([{}, {}]));
     expect(spy).toHaveBeenCalledTimes(1);
-    await expect(batchGetItems(fill(Array(100), {})));
+    await expect(batchGetItems(createFilledArray(100)));
     expect(spy).toHaveBeenCalledTimes(2);
-    const results = await batchGetItems(fill(Array(301), {}));
+    const results = await batchGetItems(createFilledArray(301));
     expect(spy).toHaveBeenCalledTimes(6);
     expect(results).toHaveLength(301);
   });

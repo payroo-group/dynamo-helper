@@ -1,5 +1,4 @@
 import { BatchGetCommand } from '@aws-sdk/lib-dynamodb';
-import range from 'lodash/range';
 import { testClient, testTableConf } from '../testUtils';
 import { batchExists as batchExistsMethod } from './batchExists';
 
@@ -68,7 +67,7 @@ describe('batchExists', () => {
       });
     });
 
-    const keys = range(100).map((i: string) => ({
+    const keys = Array.from({ length: 100 }, (_, i) => ({
       pk: i + 'pk',
       sk: i + 'sk',
     }));

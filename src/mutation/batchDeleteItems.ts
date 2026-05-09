@@ -1,6 +1,13 @@
 import { DynamoDBDocumentClient, BatchWriteCommand, BatchWriteCommandOutput } from '@aws-sdk/lib-dynamodb';
-import chunk from 'lodash/chunk';
 import { TableConfig, Key } from '../types';
+
+function chunkArray<T>(items: Array<T>, size: number): Array<Array<T>> {
+  const result: Array<Array<T>> = [];
+  for (let i = 0; i < items.length; i += size) {
+    result.push(items.slice(i, i + size));
+  }
+  return result;
+}
 
 export function batchDeleteItems(
   dbClient: DynamoDBDocumentClient,
@@ -10,7 +17,7 @@ export function batchDeleteItems(
   // batchWriteItem accepts maximum of 25 items, 16 MB total and 400KB per each item
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
   // Make chunks of 25 items
-  const batches = chunk(keys, 25) as Array<Array<Key>>;
+  const batches = chunkArray(keys, 25) as Array<Array<Key>>;
 
   return Promise.all(
     batches.map(x =>
