@@ -1,6 +1,9 @@
 import CryptoJS from 'crypto-js';
 
 export const chunkArray = <T>(items: Array<T>, size: number): Array<Array<T>> => {
+  if (!Number.isInteger(size) || size <= 0) {
+    throw new Error('size should be a positive integer');
+  }
   const result: Array<Array<T>> = [];
   for (let i = 0; i < items.length; i += size) {
     result.push(items.slice(i, i + size));
