@@ -1,5 +1,13 @@
 import CryptoJS from 'crypto-js';
 
+export const chunkArray = <T>(items: Array<T>, size: number): Array<Array<T>> => {
+  const result: Array<Array<T>> = [];
+  for (let i = 0; i < items.length; i += size) {
+    result.push(items.slice(i, i + size));
+  }
+  return result;
+};
+
 /**
  *
  * @param value

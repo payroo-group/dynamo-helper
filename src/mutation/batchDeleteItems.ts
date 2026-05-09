@@ -1,13 +1,6 @@
 import { DynamoDBDocumentClient, BatchWriteCommand, BatchWriteCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { TableConfig, Key } from '../types';
-
-function chunkArray<T>(items: Array<T>, size: number): Array<Array<T>> {
-  const result: Array<Array<T>> = [];
-  for (let i = 0; i < items.length; i += size) {
-    result.push(items.slice(i, i + size));
-  }
-  return result;
-}
+import { chunkArray } from '../utils';
 
 export function batchDeleteItems(
   dbClient: DynamoDBDocumentClient,

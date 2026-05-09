@@ -1,13 +1,6 @@
 import { DynamoDBDocumentClient, BatchGetCommand, BatchGetCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { AnyObject, TableConfig, Key } from '../types';
-
-function chunkArray<T>(items: Array<T>, size: number): Array<Array<T>> {
-  const result: Array<Array<T>> = [];
-  for (let i = 0; i < items.length; i += size) {
-    result.push(items.slice(i, i + size));
-  }
-  return result;
-}
+import { chunkArray } from '../utils';
 
 function flattenArray<T>(items: Array<Array<T>>): Array<T> {
   return items.reduce((acc, current) => acc.concat(current), [] as Array<T>);
