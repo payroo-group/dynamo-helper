@@ -24,5 +24,7 @@ describe('utils', () => {
   });
   test('chunkArray throws for non-positive chunk size', () => {
     expect(() => chunkArray([1, 2, 3], 0)).toThrow('size should be a positive integer');
+    expect(() => chunkArray([1, 2, 3], -1)).toThrow('size should be a positive integer');
+    expect(() => chunkArray([1, 2, 3], 2.5)).toThrow('size should be a positive integer');
   });
 });
