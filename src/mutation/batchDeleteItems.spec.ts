@@ -1,9 +1,9 @@
 import { BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
-import fill from 'lodash/fill';
 import { testClient, testTableConf } from '../testUtils';
 import { batchDeleteItems as batchDeleteItemsMethod } from './batchDeleteItems';
 
 describe('batchDeleteItems', () => {
+  const createFilledArray = (count: number): Array<object> => Array.from({ length: count }, () => ({}));
   const batchDeleteItems = batchDeleteItemsMethod.bind(
     null,
     testClient,
@@ -29,10 +29,10 @@ describe('batchDeleteItems', () => {
     await batchDeleteItems([{}, {}]);
     expect(spy).toHaveBeenCalledTimes(1);
 
-    await batchDeleteItems(fill(Array(50), {}));
+    await batchDeleteItems(createFilledArray(50));
     expect(spy).toHaveBeenCalledTimes(3);
 
-    await batchDeleteItems(fill(Array(201), {}));
+    await batchDeleteItems(createFilledArray(201));
     expect(spy).toHaveBeenCalledTimes(12);
   });
 
