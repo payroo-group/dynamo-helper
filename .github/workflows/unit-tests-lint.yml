@@ -28,7 +28,10 @@ jobs:
         env:
           CI: "TRUE"
       - name: Test project
-        run: yarn  test
+        # Run with a single worker to stay within the GitHub Actions runner
+        # memory limit while collecting coverage (jest otherwise OOMs with
+        # the default 50% workers on ubuntu-latest).
+        run: NODE_OPTIONS='--max-old-space-size=6144' npx jest --maxWorkers=1
         env:
           CI: "TRUE"
       - name: Code Coverage

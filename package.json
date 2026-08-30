@@ -42,7 +42,7 @@
     "crypto-js": "^4.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-typescript": "^7.28.0",
     "@types/crypto-js": "^4.0.1",
@@ -59,14 +59,20 @@
     "typescript": "~5.7.2"
   },
   "resolutions": {
-    "@babel/traverse": "7.29.0",
+    "@babel/core": "^7.29.6",
+    "@babel/traverse": "^7.29.6",
+    "ajv": "^6.14.0",
     "ansi-regex": "^5.0.1",
+    "brace-expansion": "^1.1.16",
     "cross-spawn": "^7.0.6",
+    "js-yaml": "^4.3.1",
+    "lodash": "^4.18.0",
     "minimatch": "^3.1.4",
     "minimist": "^1.2.8",
     "picomatch": "^2.3.2",
     "semver": "^7.7.2",
-    "semver-regex": "^3.1.4"
+    "semver-regex": "^3.1.4",
+    "yaml": "^1.10.3"
   },
   "publishConfig": {
     "access": "public",
