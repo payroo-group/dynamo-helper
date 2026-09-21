@@ -186,4 +186,20 @@ describe('updateItem', () => {
       updateItem(key, conditions, attributesToUpdate),
     ).rejects.toStrictEqual({});
   });
+
+  it('should omit ConditionExpression when no conditions are given', async () => {
+    const key = { pk: 'user_123' };
+
+    await updateItem(key, [], { name: 'Dru' });
+
+    expect(spy).toHaveBeenCalledWith(expect.objectContaining({
+      input: {
+        Key: { pk: 'user_123' },
+        TableName: 'sample-table',
+        UpdateExpression: 'SET #key_name = :val_name',
+        ExpressionAttributeNames: { '#key_name': 'name' },
+        ExpressionAttributeValues: { ':val_name': 'Dru' },
+      }
+    }));
+  });
 });
