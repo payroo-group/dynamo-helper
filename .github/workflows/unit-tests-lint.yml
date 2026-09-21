@@ -15,12 +15,18 @@ jobs:
     timeout-minutes: 20
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22]
     steps:
       - name: Skip NO CI
         if: contains( github.event.head_commit.message, '***NO_CI***')
         run: exit 78
       - uses: actions/checkout@v4
+      # Without this the matrix only renames the jobs: both would run on the
+      # runner's default node, so an engine mismatch stays invisible until a
+      # publish job (which does pin a version) fails on it.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Install Node Dependencies
         run: yarn install
       - name: Build packages
