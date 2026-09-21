@@ -45,7 +45,7 @@ export type TransactWriteItem =
  * All operations must succeed or the entire transaction fails
  * @param transactItems Array of transaction items (Put, Delete, Update, or ConditionCheck)
  */
-export async function transactWriteItems(
+export function transactWriteItems(
   dbClient: DynamoDBDocumentClient,
   table: TableConfig,
   transactItems: Array<TransactWriteItem>,
