@@ -39,7 +39,6 @@ export async function updateItem<T extends AnyObject>(
   const params: UpdateCommandInput = {
     TableName: table.name,
     Key: key,
-    ConditionExpression: conditionExpr.expression,
     UpdateExpression: updateExpr.expression,
     ExpressionAttributeNames:
       // merge condition and update expressions' names
@@ -48,6 +47,10 @@ export async function updateItem<T extends AnyObject>(
       // merge condition and update expressions' values
       Object.assign({}, conditionExpr.attrValues, updateExpr.attrValues),
   };
+
+  if (conditionExpr.expression) {
+    params.ConditionExpression = conditionExpr.expression;
+  }
 
   return dbClient.send(new UpdateCommand(params));
 }

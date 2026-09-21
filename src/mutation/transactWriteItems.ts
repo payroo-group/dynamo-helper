@@ -45,7 +45,7 @@ export type TransactWriteItem =
  * All operations must succeed or the entire transaction fails
  * @param transactItems Array of transaction items (Put, Delete, Update, or ConditionCheck)
  */
-export function transactWriteItems(
+export async function transactWriteItems(
   dbClient: DynamoDBDocumentClient,
   table: TableConfig,
   transactItems: Array<TransactWriteItem>,
@@ -79,7 +79,9 @@ export function transactWriteItems(
         const conditionExpr = buildConditionExpressions(item.Delete.conditions);
         deleteItem.ConditionExpression = conditionExpr.expression;
         deleteItem.ExpressionAttributeNames = conditionExpr.attrNames;
-        deleteItem.ExpressionAttributeValues = conditionExpr.attrValues;
+        if (Object.keys(conditionExpr.attrValues).length > 0) {
+          deleteItem.ExpressionAttributeValues = conditionExpr.attrValues;
+        }
       }
 
       return { Delete: deleteItem };
@@ -123,15 +125,18 @@ export function transactWriteItems(
     if ('ConditionCheck' in item) {
       const conditionExpr = buildConditionExpressions(item.ConditionCheck.conditions);
 
-      return {
-        ConditionCheck: {
-          TableName: table.name,
-          Key: item.ConditionCheck.Key,
-          ConditionExpression: conditionExpr.expression,
-          ExpressionAttributeNames: conditionExpr.attrNames,
-          ExpressionAttributeValues: conditionExpr.attrValues,
-        },
+      const conditionCheckItem: Record<string, unknown> = {
+        TableName: table.name,
+        Key: item.ConditionCheck.Key,
+        ConditionExpression: conditionExpr.expression,
+        ExpressionAttributeNames: conditionExpr.attrNames,
       };
+
+      if (Object.keys(conditionExpr.attrValues).length > 0) {
+        conditionCheckItem.ExpressionAttributeValues = conditionExpr.attrValues;
+      }
+
+      return { ConditionCheck: conditionCheckItem };
     }
 
     return item;
